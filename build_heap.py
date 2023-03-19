@@ -1,4 +1,5 @@
 def heapify(data, n, i, swaps):
+    
     largest = i
     l = 2 * i + 1
     r = 2 * i + 2
@@ -13,6 +14,7 @@ def heapify(data, n, i, swaps):
         swaps.append((i, largest))
         data[i],data[largest] = data[largest],data[i]
         heapify(data, n, largest, swaps)
+        
  
 def build_heap(data):
     n = len(data)
@@ -22,6 +24,7 @@ def build_heap(data):
     return swaps
 
 def main():
+    
     option = input("Enter input type: ")
     data = []
 
@@ -32,14 +35,17 @@ def main():
             with open(f"tests/{file_path}", "r") as file:
                 n = int(file.readline().strip())
                 data = list(map(int, file.readline().strip().split()))
+                
         except FileNotFoundError:
             print("File not found.")
             return
+        
     elif "I" in option:
-        # input from keyboard
+        
         try:
             n = int(input())
             data = list(map(int, input().split()))
+            
         except ValueError:
             print("Invalid input format.")
             return
