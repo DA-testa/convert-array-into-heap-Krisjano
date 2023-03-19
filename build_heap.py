@@ -1,38 +1,43 @@
-# python3
+def heapify(lst):
+    res = []
+    n = len(lst)
 
+    def sift_down(i):
+        smallest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+        if left < n and lst[left] < lst[smallest]:
+            smallest = left
+        if right < n and lst[right] < lst[smallest]:
+            smallest = right
+        if i != smallest:
+            res.append((i, smallest))
+            lst[i], lst[smallest] = lst[smallest], lst[i]
+            sift_down(smallest)
 
-def build_heap(data):
-    swaps = []
-    # TODO: Creat heap and heap sort
-    # try to achieve  O(n) and not O(n2)
+    for i in range(n // 2, -1, -1):
+        sift_down(i)
 
-
-    return swaps
+    return res
 
 
 def main():
-    
-    # TODO : add input and corresponding checks
-    # add another input for I or F 
-    # first two tests are from keyboard, third test is from a file
+    text = input("choose 'I' for input or 'F' for file")
+    if "F" in text:
+        f_name = input("Enter file name: ")
+        if "a" not in f_name:
+            path = './tests/' + f_name
+            with open(path, 'r', encoding='utf-8') as file:
+                n = int(file.readline())
+                lst = list(map(int, file.readline().split()))
+    if "I" in text:
+        n = int(input())
+        lst = list(map(int, input().split()))
 
+    assert lst is not None and len(lst) == n
+    swaps = heapify(lst)
+    assert len(swaps) <= n * 4
 
-    # input from keyboard
-    n = int(input())
-    data = list(map(int, input().split()))
-
-    # checks if lenght of data is the same as the said lenght
-    assert len(data) == n
-
-    # calls function to assess the data 
-    # and give back all swaps
-    swaps = build_heap(data)
-
-    # TODO: output how many swaps were made, 
-    # this number should be less than 4n (less than 4*len(data))
-
-
-    # output all swaps
     print(len(swaps))
     for i, j in swaps:
         print(i, j)
