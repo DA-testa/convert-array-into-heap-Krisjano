@@ -1,30 +1,19 @@
-def heapify(data, n, i, swaps):
-    
-    largest = i
-    l = 2 * i + 1
-    r = 2 * i + 2
- 
-    if l < n and data[l] > data[largest]:
-        largest = l
- 
-    if r < n and data[r] > data[largest]:
-        largest = r
- 
-    if largest != i:
-        swaps.append((i, largest))
-        data[i],data[largest] = data[largest],data[i]
-        heapify(data, n, largest, swaps)
-        
- 
 def build_heap(data):
+    
     n = len(data)
     swaps = []
-    for i in range(n // 2 - 1, -1, -1):
-        heapify(data, n, i, swaps)
+    
+    for i in range(n):
+        j = i
+        
+        while j > 0 and data[(j - 1) // 2] > data[j]:
+            swaps.append((j, (j - 1) // 2))
+            data[j], data[(j - 1) // 2] = data[(j - 1) // 2], data[j]
+            j = (j - 1) // 2
+            
     return swaps
 
 def main():
-    
     option = input("Enter input type: ")
     data = []
 
@@ -41,7 +30,7 @@ def main():
             return
         
     elif "I" in option:
-        
+        # input from keyboard
         try:
             n = int(input())
             data = list(map(int, input().split()))
