@@ -1,68 +1,42 @@
-def heap_sort(data):
-    swaps = []
-    
-    n = len(data)
-    for i in range(n//2, -1, -1):
-        sift_down(i, data, swaps)
-        
-    for i in range(n-1, 0, -1):
-        data[0], data[i] = data[i], data[0]
-        swaps.append((0, i))
-        sift_down(0, data[:i], swaps)
-        
-    return swaps[::-1]
+def heapify(lst):
+    res = []
+    n = len(lst)
 
-def sift_down(i, data, swaps):
-    n = len(data)
-    min_index = i
-    l = 2*i + 1
-    if l < n and data[l] < data[min_index]:
-        min_index = l
-        
-    r = 2*i + 2
-    if r < n and data[r] < data[min_index]:
-        min_index = r
-        
-    if i != min_index:
-        swaps.append((i, min_index))
-        data[i], data[min_index] = data[min_index], data[i]
-        sift_down(min_index, data, swaps)
-        
+    def sift_down(i):
+        smallest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+        if left < n and lst[left] < lst[smallest]:
+            smallest = left
+        if right < n and lst[right] < lst[smallest]:
+            smallest = right
+        if i != smallest:
+            res.append((i, smallest))
+            lst[i], lst[smallest] = lst[smallest], lst[i]
+            sift_down(smallest)
+
+    for i in range(n // 2, -1, -1):
+        sift_down(i)
+
+    return res
+
 
 def main():
-    option = input("Enter input type: ")
-    data = []
+    text = input("choose 'I' for input or 'F' for file")
+    if "F" in text:
+        f_name = input("Enter file name: ")
+        if "a" not in f_name:
+            path = './tests/' + f_name
+            with open(path, 'r', encoding='utf-8') as file:
+                n = int(file.readline())
+                lst = list(map(int, file.readline().split()))
+    if "I" in text:
+        n = int(input())
+        lst = list(map(int, input().split()))
 
-    if "F" in option:
-        # input from file
-        try:
-            file_path = input("Input file path: ")
-            with open(f"tests/{file_path}", "r") as file:
-                n = int(file.readline().strip())
-                data = list(map(int, file.readline().strip().split()))
-                
-        except FileNotFoundError:
-            print("File not found.")
-            return
-        
-    elif "I" in option:
-        # input from keyboard
-        try:
-            n = int(input())
-            data = list(map(int, input().split()))
-            
-        except ValueError:
-            print("Invalid input format.")
-            return
-        
-    else:
-        print("Invalid input type.")
-        return
-    
-
-    assert len(data) == n
-
-    swaps = heap_sort(data)
+    assert lst is not None and len(lst) == n
+    swaps = heapify(lst)
+    assert len(swaps) <= n * 4
 
     print(len(swaps))
     for i, j in swaps:
